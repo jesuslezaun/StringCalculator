@@ -22,4 +22,16 @@ class StringCalculatorTest extends TestCase
         self::assertEquals("0", $result);
     }
 
+    /**
+     * @test
+     */
+    public function given_one_adder_returns_itself()
+    {
+        $stringCalculator = new StringCalculator();
+
+        $result = $stringCalculator->add("1");
+
+        self::assertEquals("1", $result);
+    }
+
 }

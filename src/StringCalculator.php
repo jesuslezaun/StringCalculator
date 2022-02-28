@@ -9,6 +9,10 @@ class StringCalculator
 
     public function add(string $adders): string
     {
+        if($adders != "")
+        {
+            return $adders;
+        }
         return "0";
     }
 
