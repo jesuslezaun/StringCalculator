@@ -61,4 +61,14 @@ class StringCalculatorTest extends TestCase
         self::assertEquals("5.3", $result);
     }
 
+    /**
+     * @test
+     */
+    public function given_multiple_adders_allowing_new_line_as_separator_returns_the_sum()
+    {
+        $result = $this->stringCalculator->add("2.2\n2,1.1");
+
+        self::assertEquals("5.3", $result);
+    }
+
 }

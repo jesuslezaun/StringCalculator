@@ -11,6 +11,8 @@ class StringCalculator
     {
         if($inputString != "")
         {
+            $inputString = str_replace("\n", ",", $inputString);
+
             $adders = explode(",", $inputString);
             $sum = 0;
 
