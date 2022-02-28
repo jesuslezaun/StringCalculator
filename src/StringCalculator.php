@@ -12,13 +12,14 @@ class StringCalculator
         if($inputString != "")
         {
             $separator = $this->extractSeparator($inputString);
+            $isOriginalSeparator = $separator == ",";
 
-            if($separator != ",")
+            if(!$isOriginalSeparator)
                 $inputString = substr($inputString, strpos($inputString, "\n"));
 
-            if(($errorMessage = $this->errorDetection($inputString)) == "")
+            if(($errorMessage = $this->errorDetection($inputString, $separator)) == "")
             {
-                if($separator == ",")
+                if($isOriginalSeparator)
                     $inputString = str_replace("\n", $separator, $inputString);
 
                 $adders = explode($separator, $inputString);
@@ -36,20 +37,37 @@ class StringCalculator
         return "0";
     }
 
-    private function errorDetection(string $inputString): string
+    private function errorDetection(string $inputString, string $separator): string
     {
         $errorMessage = "";
 
+        $isOriginalSeparator = $separator == ",";
+
         for($position = 1; $position < strlen($inputString); $position++)
         {
-            $isSeparatorCurrentPosition = ($inputString[$position] == ",") || ($inputString[$position] == "\n");
-            $isSeparatorPreviousPosition = ($inputString[$position - 1] == ",") || ($inputString[$position - 1] == "\n");
+            if(!$isOriginalSeparator && $inputString[$position] == ",")
+                $errorMessage .= "'" . $separator . "' expected but ',' found at position " . $position - 1 . ".";
+
+            if($isOriginalSeparator)
+            {
+                $isSeparatorCurrentPosition = ($inputString[$position] == ",") || ($inputString[$position] == "\n");
+                $isSeparatorPreviousPosition = ($inputString[$position - 1] == ",") || ($inputString[$position - 1] == "\n");
+            }
+            else
+            {
+                $isSeparatorCurrentPosition = ($inputString[$position] == $separator);
+                $isSeparatorPreviousPosition = ($inputString[$position - 1] == $separator);
+            }
 
             if($isSeparatorCurrentPosition && $isSeparatorPreviousPosition)
                 $errorMessage .= "Number expected but '" . $inputString[$position] . "' found at position " . $position . ".";
         }
 
-        $isSeparatorLastPosition = ($inputString[strlen($inputString) - 1] == ",") || ($inputString[strlen($inputString) - 1] == "\n");
+        if($isOriginalSeparator)
+            $isSeparatorLastPosition = ($inputString[strlen($inputString) - 1] == ",") || ($inputString[strlen($inputString) - 1] == "\n");
+        else
+            $isSeparatorLastPosition = ($inputString[strlen($inputString) - 1] == $separator);
+
         if($isSeparatorLastPosition)
             $errorMessage .= "Number expected but EOF found.";
 

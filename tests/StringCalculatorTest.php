@@ -101,4 +101,14 @@ class StringCalculatorTest extends TestCase
         self::assertEquals("6.3", $result);
     }
 
+    /**
+     * @test
+     */
+    public function given_a_change_of_separator_if_the_comma_separator_is_used_returns_an_error()
+    {
+        $result = $this->stringCalculator->add("//|\n1,3|2.3");
+
+        self::assertEquals("'|' expected but ',' found at position 1.", $result);
+    }
+
 }
