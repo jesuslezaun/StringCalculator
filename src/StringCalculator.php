@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Deg540\PHPTestingBoilerplate;
 
+use PhpParser\Node\Expr\Array_;
+
 class StringCalculator
 {
 
@@ -24,11 +26,31 @@ class StringCalculator
 
                 $adders = explode($separator, $inputString);
                 $sum = 0;
+                $negativeAdders = [];
 
                 foreach ($adders as $adder)
+                {
+                    if($adder < 0)
+                        $negativeAdders[] = $adder;
                     $sum += $adder;
+                }
 
-                return strval($sum);
+                if($negativeAdders != [])
+                {
+                    $errorMessage = "Negative not allowed : ";
+
+                    for($position = 0; $position < count($negativeAdders); $position++)
+                    {
+                        if($position < count($negativeAdders) - 1)
+                            $errorMessage .= $negativeAdders[$position] . ", ";
+                        else
+                            $errorMessage .= $negativeAdders[$position];
+                    }
+
+                    return $errorMessage;
+                }
+                else
+                    return strval($sum);
             }
 
             return $errorMessage;
