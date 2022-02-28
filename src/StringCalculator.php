@@ -15,7 +15,7 @@ class StringCalculator
             $isOriginalSeparator = $separator == ",";
 
             if(!$isOriginalSeparator)
-                $inputString = substr($inputString, strpos($inputString, "\n"));
+                $inputString = substr($inputString, strpos($inputString, "\n") + 1);
 
             $errorMessage = $this->errorDetection($inputString, $separator);
 
@@ -73,7 +73,7 @@ class StringCalculator
             {
                 if($errorMessage != "")
                     $errorMessage .= "\n";
-                $errorMessage .= "'" . $separator . "' expected but ',' found at position " . $position - 1 . ".";
+                $errorMessage .= "'" . $separator . "' expected but ',' found at position " . $position . ".";
             }
 
             if($isOriginalSeparator)
