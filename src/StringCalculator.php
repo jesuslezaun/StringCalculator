@@ -38,9 +38,14 @@ class StringCalculator
         {
             $isSeparatorCurrentPosition = ($inputString[$position] == ",") || ($inputString[$position] == "\n");
             $isSeparatorPreviousPosition = ($inputString[$position - 1] == ",") || ($inputString[$position - 1] == "\n");
+
             if($isSeparatorCurrentPosition && $isSeparatorPreviousPosition)
                 $errorMessage .= "Number expected but '" . $inputString[$position] . "' found at position " . $position . ".";
         }
+
+        $isSeparatorLastPosition = ($inputString[strlen($inputString) - 1] == ",") || ($inputString[strlen($inputString) - 1] == "\n");
+        if($isSeparatorLastPosition)
+            $errorMessage .= "Number expected but EOF found.";
 
         return $errorMessage;
     }

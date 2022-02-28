@@ -81,4 +81,14 @@ class StringCalculatorTest extends TestCase
         self::assertEquals("Number expected but '\n' found at position 6.", $result);
     }
 
+    /**
+     * @test
+     */
+    public function given_no_adder_at_end_position_returns_an_error()
+    {
+        $result = $this->stringCalculator->add("1,3,2.3\n");
+
+        self::assertEquals("Number expected but EOF found.", $result);
+    }
+
 }
