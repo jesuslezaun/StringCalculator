@@ -91,4 +91,14 @@ class StringCalculatorTest extends TestCase
         self::assertEquals("Number expected but EOF found.", $result);
     }
 
+    /**
+     * @test
+     */
+    public function given_multiple_adders_with_a_change_of_separator_returns_the_sum()
+    {
+        $result = $this->stringCalculator->add("//aep\n1aep3aep2.3");
+
+        self::assertEquals("6.3", $result);
+    }
+
 }

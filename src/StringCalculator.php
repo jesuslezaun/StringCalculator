@@ -11,11 +11,17 @@ class StringCalculator
     {
         if($inputString != "")
         {
+            $separator = $this->extractSeparator($inputString);
+
+            if($separator != ",")
+                $inputString = substr($inputString, strpos($inputString, "\n"));
+
             if(($errorMessage = $this->errorDetection($inputString)) == "")
             {
-                $inputString = str_replace("\n", ",", $inputString);
+                if($separator == ",")
+                    $inputString = str_replace("\n", $separator, $inputString);
 
-                $adders = explode(",", $inputString);
+                $adders = explode($separator, $inputString);
                 $sum = 0;
 
                 foreach ($adders as $adder)
@@ -48,6 +54,16 @@ class StringCalculator
             $errorMessage .= "Number expected but EOF found.";
 
         return $errorMessage;
+    }
+
+    private function extractSeparator(string $inputString): string
+    {
+        $separator = ",";
+
+        if($inputString[0] == "/" && $inputString[1] == "/")
+            $separator = substr($inputString, 2, strpos($inputString, "\n") - 2);
+
+        return $separator;
     }
 
 }
