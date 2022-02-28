@@ -34,4 +34,16 @@ class StringCalculatorTest extends TestCase
         self::assertEquals("1", $result);
     }
 
+    /**
+     * @test
+     */
+    public function given_two_adders_returns_the_sum()
+    {
+        $stringCalculator = new StringCalculator();
+
+        $result = $stringCalculator->add("2.2,2");
+
+        self::assertEquals("4.2", $result);
+    }
+
 }

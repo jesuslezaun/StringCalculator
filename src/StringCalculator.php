@@ -7,12 +7,19 @@ namespace Deg540\PHPTestingBoilerplate;
 class StringCalculator
 {
 
-    public function add(string $adders): string
+    public function add(string $inputString): string
     {
-        if($adders != "")
+        if($inputString != "")
         {
-            return $adders;
+            $adders = explode(",", $inputString);
+            $sum = 0;
+
+            foreach ($adders as $adder)
+                $sum += $adder;
+
+            return strval($sum);
         }
+
         return "0";
     }
 
