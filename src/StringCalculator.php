@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Deg540\PHPTestingBoilerplate;
 
-use PhpParser\Node\Expr\Array_;
-
 class StringCalculator
 {
 
@@ -19,41 +17,45 @@ class StringCalculator
             if(!$isOriginalSeparator)
                 $inputString = substr($inputString, strpos($inputString, "\n"));
 
-            if(($errorMessage = $this->errorDetection($inputString, $separator)) == "")
+            $errorMessage = $this->errorDetection($inputString, $separator);
+
+            if($isOriginalSeparator)
+                $inputString = str_replace("\n", $separator, $inputString);
+
+            $adders = explode($separator, $inputString);
+            $sum = 0;
+            $negativeAdders = [];
+
+            foreach ($adders as $adder)
             {
-                if($isOriginalSeparator)
-                    $inputString = str_replace("\n", $separator, $inputString);
-
-                $adders = explode($separator, $inputString);
-                $sum = 0;
-                $negativeAdders = [];
-
-                foreach ($adders as $adder)
+                if(is_numeric($adder))
                 {
                     if($adder < 0)
                         $negativeAdders[] = $adder;
+
                     $sum += $adder;
                 }
-
-                if($negativeAdders != [])
-                {
-                    $errorMessage = "Negative not allowed : ";
-
-                    for($position = 0; $position < count($negativeAdders); $position++)
-                    {
-                        if($position < count($negativeAdders) - 1)
-                            $errorMessage .= $negativeAdders[$position] . ", ";
-                        else
-                            $errorMessage .= $negativeAdders[$position];
-                    }
-
-                    return $errorMessage;
-                }
-                else
-                    return strval($sum);
             }
 
-            return $errorMessage;
+            if($negativeAdders != [])
+            {
+                if($errorMessage != "")
+                    $errorMessage .= "\n";
+                $errorMessage .= "Negative not allowed : ";
+
+                for($position = 0; $position < count($negativeAdders); $position++)
+                {
+                    if($position < count($negativeAdders) - 1)
+                        $errorMessage .= $negativeAdders[$position] . ", ";
+                    else
+                        $errorMessage .= $negativeAdders[$position];
+                }
+            }
+
+            if($errorMessage == "")
+                return strval($sum);
+            else
+                return $errorMessage;
         }
 
         return "0";
@@ -68,7 +70,11 @@ class StringCalculator
         for($position = 1; $position < strlen($inputString); $position++)
         {
             if(!$isOriginalSeparator && $inputString[$position] == ",")
+            {
+                if($errorMessage != "")
+                    $errorMessage .= "\n";
                 $errorMessage .= "'" . $separator . "' expected but ',' found at position " . $position - 1 . ".";
+            }
 
             if($isOriginalSeparator)
             {
@@ -82,7 +88,12 @@ class StringCalculator
             }
 
             if($isSeparatorCurrentPosition && $isSeparatorPreviousPosition)
+            {
+                if($errorMessage != "")
+                    $errorMessage .= "\n";
                 $errorMessage .= "Number expected but '" . $inputString[$position] . "' found at position " . $position . ".";
+            }
+
         }
 
         if($isOriginalSeparator)
@@ -91,7 +102,11 @@ class StringCalculator
             $isSeparatorLastPosition = ($inputString[strlen($inputString) - 1] == $separator);
 
         if($isSeparatorLastPosition)
+        {
+            if($errorMessage != "")
+                $errorMessage .= "\n";
             $errorMessage .= "Number expected but EOF found.";
+        }
 
         return $errorMessage;
     }

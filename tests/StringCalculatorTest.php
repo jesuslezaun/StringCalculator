@@ -121,4 +121,14 @@ class StringCalculatorTest extends TestCase
         self::assertEquals("Negative not allowed : -5", $result);
     }
 
+    /**
+     * @test
+     */
+    public function given_negative_adders_and_two_consecutive_separators_returns_multiple_errors()
+    {
+        $result = $this->stringCalculator->add("2,,-5");
+
+        self::assertEquals("Number expected but ',' found at position 2.\nNegative not allowed : -5", $result);
+    }
+
 }
