@@ -71,4 +71,14 @@ class StringCalculatorTest extends TestCase
         self::assertEquals("5.3", $result);
     }
 
+    /**
+     * @test
+     */
+    public function given_two_consecutive_separators_returns_an_error()
+    {
+        $result = $this->stringCalculator->add("175.2,\n35");
+
+        self::assertEquals("Number expected but '\n' found at position 6.", $result);
+    }
+
 }

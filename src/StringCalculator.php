@@ -11,18 +11,38 @@ class StringCalculator
     {
         if($inputString != "")
         {
-            $inputString = str_replace("\n", ",", $inputString);
+            if(($errorMessage = $this->errorDetection($inputString)) == "")
+            {
+                $inputString = str_replace("\n", ",", $inputString);
 
-            $adders = explode(",", $inputString);
-            $sum = 0;
+                $adders = explode(",", $inputString);
+                $sum = 0;
 
-            foreach ($adders as $adder)
-                $sum += $adder;
+                foreach ($adders as $adder)
+                    $sum += $adder;
 
-            return strval($sum);
+                return strval($sum);
+            }
+
+            return $errorMessage;
         }
 
         return "0";
+    }
+
+    private function errorDetection(string $inputString): string
+    {
+        $errorMessage = "";
+
+        for($position = 1; $position < strlen($inputString); $position++)
+        {
+            $isSeparatorCurrentPosition = ($inputString[$position] == ",") || ($inputString[$position] == "\n");
+            $isSeparatorPreviousPosition = ($inputString[$position - 1] == ",") || ($inputString[$position - 1] == "\n");
+            if($isSeparatorCurrentPosition && $isSeparatorPreviousPosition)
+                $errorMessage .= "Number expected but '" . $inputString[$position] . "' found at position " . $position . ".";
+        }
+
+        return $errorMessage;
     }
 
 }
